@@ -1,65 +1,63 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import Head from 'next/head';
+import firebase from 'firebase/app';
+import { useEffect, useState } from 'react';
+import useAuthentication from '../hooks/authentication';
+import fetchPastWeights from '../hooks/fetchPastWeights';
 
-export default function Home() {
+import styled from 'styled-components';
+
+const Home = () => {
+  const { user } = useAuthentication();
+  const [currentWeight, setCurrentWeight] = useState(75);
+  const [isSending, setIsSending] = useState(false);
+  const pastWeights = fetchPastWeights({ user });
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setIsSending(true);
+    await firebase.firestore().collection('weights').add({
+      uid: firebase.auth().currentUser.uid,
+      weight: currentWeight,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+    setIsSending(false);
+    alert('質問を送信しました');
+  }
+
   return (
-    <div className={styles.container}>
+    <>
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Content>
+        <h2>登録</h2>
+        <p>ID:{user?.uid}</p>
+        <form onSubmit={onSubmit}>
+          <input
+            type="number"
+            min="50"
+            max="90"
+            step="0.1"
+            value={currentWeight}
+            onChange={(e) => setCurrentWeight(Number(e.target.value))}
+          ></input>
+          <div>
+            {isSending ? <p>登録中</p> : <button type="submit">登録</button>}
+          </div>
+        </form>
+        <h2>過去</h2>
+        {pastWeights.map(({ weight }, index) => (
+          <p key={index}>{weight}</p>
+        ))}
+      </Content>
+    </>
+  );
+};
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+const Content = styled.div`
+  max-width: 600px;
+  margin: 0 auto;
+`;
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
-  )
-}
+export default Home;
