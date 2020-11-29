@@ -10,7 +10,7 @@ const Home = () => {
   const { user } = useAuthentication();
   const [currentWeight, setCurrentWeight] = useState(75);
   const [isSending, setIsSending] = useState(false);
-  const pastWeights = fetchPastWeights({ user });
+  const pastWeights = fetchPastWeights();
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
