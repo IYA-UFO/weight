@@ -14,7 +14,7 @@ export default function UserShow() {
   const [body, setBody] = useState('');
   const [isSending, setIsSending] = useState(false);
 
-  async function onSubmit(e: FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsSending(true);
     await firebase.firestore().collection('questions').add({
