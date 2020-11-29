@@ -1,11 +1,10 @@
 import firebase from 'firebase/app';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
-import { Question } from '../../models/Question';
 import useAuthentication from '../../hooks/authentication';
 
 export default function QuestionsReceived() {
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const [questions, setQuestions] = useState([]);
   const { user } = useAuthentication();
   useEffect(() => {
     if (!process.browser) {
@@ -29,7 +28,7 @@ export default function QuestionsReceived() {
       }
 
       const gotQuestions = snapshot.docs.map((doc) => {
-        const question = doc.data() as Question;
+        const question = doc.data();
         question.id = doc.id;
         return question;
       });
