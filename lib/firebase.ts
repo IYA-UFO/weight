@@ -1,7 +1,7 @@
-import firebase from 'firebase/app'
-import 'firebase/analytics'
-import 'firebase/auth'
-import 'firebase/firestore'
+import firebase from 'firebase/app';
+import 'firebase/analytics';
+import 'firebase/auth';
+import 'firebase/firestore';
 
 if (typeof window !== 'undefined' && firebase.apps.length === 0) {
   const firebaseConfig = {
@@ -13,8 +13,8 @@ if (typeof window !== 'undefined' && firebase.apps.length === 0) {
     messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
     appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
     measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
-  }
+  };
 
-  firebase.initializeApp(firebaseConfig)
-  firebase.analytics()
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
 }
