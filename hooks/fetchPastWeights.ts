@@ -23,7 +23,7 @@ const useFetchPastWeight = () => {
         .get();
 
       if (snapshot.empty) {
-        console.log('isEmty');
+        console.log('snapshotIsEmpty');
         return;
       }
 
