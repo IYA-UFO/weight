@@ -2,21 +2,22 @@ import firebase from 'firebase/app';
 import 'firebase/analytics';
 import 'firebase/auth';
 import 'firebase/firestore';
-import dayjs from 'dayjs';
 import 'dayjs/locale/ja';
 
 import React, { useEffect, useState } from 'react';
 import initFirebase from '../lib/initFirebase';
 
 import WeightInputArea from '../components/WeightInputArea';
+import PastWeight from '../components/PastWeight';
 
 export const UserContext = React.createContext(null);
 
 const Home = () => {
   const [user, setUser] = useState(null);
   useEffect(() => {
-    if (firebase.apps.length !== 0) return;
-    initFirebase();
+    if (firebase.apps.length === 0) {
+      initFirebase();
+    }
     firebase.auth().onAuthStateChanged(function (firebaseUser) {
       if (firebaseUser) {
         const loginUser = {
@@ -33,7 +34,6 @@ const Home = () => {
       .auth()
       .signInWithPopup(provider)
       .then(function (result) {
-        console.log({ result });
         setUser({
           uid: result.user.uid,
         });
@@ -45,6 +45,7 @@ const Home = () => {
       {!user && <button onClick={login}>Google Login</button>}
       {JSON.stringify(user, null, 2)}
       <WeightInputArea />
+      <PastWeight />
     </UserContext.Provider>
   );
 };

@@ -1,10 +1,14 @@
 import firebase from 'firebase/app';
 import { useEffect, useState } from 'react';
 
-const useFetchPastWeight = (user) => {
+const useFetchPastWeight = () => {
   const [pastWeights, setPastWeights] = useState([]);
 
   useEffect(() => {
+    if (firebase.apps.length === 0) {
+      return null;
+    }
+    const user = firebase.auth().currentUser;
     if (!process.browser) {
       return;
     }
@@ -12,8 +16,6 @@ const useFetchPastWeight = (user) => {
       return;
     }
     async function loadPastWeights() {
-      console.log('loadPastWeights');
-
       const snapshot = await firebase
         .firestore()
         .collection('weights')
@@ -21,18 +23,18 @@ const useFetchPastWeight = (user) => {
         .get();
 
       if (snapshot.empty) {
+        console.log('isEmty');
         return;
       }
 
-      const gotWeights = snapshot.docs.map((doc) => {
-        const weight = doc.data();
-        weight.id = doc.id;
-        return weight;
-      });
-      setPastWeights(gotWeights);
+      const dataArr = snapshot.docs.map((doc) => ({
+        weight: doc.data().weight,
+        date: doc.data().createdAt.toDate(),
+      }));
+      setPastWeights(dataArr);
     }
     loadPastWeights();
-  }, [process.browser, user]);
+  }, [process.browser]);
   return pastWeights;
 };
 
