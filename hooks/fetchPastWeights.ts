@@ -1,10 +1,8 @@
 import firebase from 'firebase/app';
 import { useEffect, useState } from 'react';
-import useAuthentication from '../hooks/authentication';
 
-const useFetchPastWeight = () => {
+const useFetchPastWeight = (user) => {
   const [pastWeights, setPastWeights] = useState([]);
-  const { user } = useAuthentication();
 
   useEffect(() => {
     if (!process.browser) {
