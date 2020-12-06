@@ -1,73 +1,51 @@
-import Head from 'next/head';
 import firebase from 'firebase/app';
-import { useEffect, useState } from 'react';
-// import useAuthentication from '../hooks/authentication';
-import fetchPastWeights from '../hooks/fetchPastWeights';
+import 'firebase/analytics';
+import 'firebase/auth';
+import 'firebase/firestore';
+import dayjs from 'dayjs';
+import 'dayjs/locale/ja';
 
-import styled from 'styled-components';
+import React, { useEffect, useState } from 'react';
+import initFirebase from '../lib/initFirebase';
 
-import HeadElement from '../components/HeadElement';
 import WeightInputArea from '../components/WeightInputArea';
 
+export const UserContext = React.createContext(null);
+
 const Home = () => {
-  // const { user } = useAuthentication();
-  const [currentWeight, setCurrentWeight] = useState(75);
-  const [isSending, setIsSending] = useState(false);
-  const pastWeights = fetchPastWeights();
-
   const [user, setUser] = useState(null);
-
-  const login = () => {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithPopup(provider);
-  };
-
-  const logout = () => {
-    firebase.auth().signOut();
-  };
-
   useEffect(() => {
-    if (user !== null) {
-      return;
-    }
-
-    login();
-
+    if (firebase.apps.length !== 0) return;
+    initFirebase();
     firebase.auth().onAuthStateChanged(function (firebaseUser) {
       if (firebaseUser) {
         const loginUser = {
           uid: firebaseUser.uid,
-          isAnonymous: firebaseUser.isAnonymous,
-          name: '',
         };
         setUser(loginUser);
-      } else {
-        setUser(null);
       }
     });
   }, []);
 
+  const login = () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    firebase
+      .auth()
+      .signInWithPopup(provider)
+      .then(function (result) {
+        setUser({
+          uid: result.uid,
+        });
+      });
+  };
+
   return (
-    <>
-      <HeadElement />
-      <Content>
-        <WeightInputArea />
-        {user ? (
-          <button onClick={logout}>Google Logout</button>
-        ) : (
-          <button onClick={login}>Google Login</button>
-        )}
-        {pastWeights.map(({ weight }, index) => (
-          <p key={index}>{weight}</p>
-        ))}
-      </Content>
-    </>
+    <UserContext.Provider value={user}>
+      {!user && <button onClick={login}>Google Login</button>}
+      {JSON.stringify(user, null, 2)}
+      <WeightInputArea />
+    </UserContext.Provider>
   );
 };
-
-const Content = styled.div`
-  max-width: 600px;
-  margin: 0 auto;
-`;
 
 export default Home;

@@ -1,9 +1,7 @@
 import firebase from 'firebase/app';
 import { useState } from 'react';
-import useAuthentication from '../hooks/authentication';
 
 const WeightInputArea = () => {
-  const { user } = useAuthentication();
   const [currentWeight, setCurrentWeight] = useState(75);
   const [isSending, setIsSending] = useState(false);
 
@@ -16,13 +14,12 @@ const WeightInputArea = () => {
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     });
     setIsSending(false);
-    alert('質問を送信しました');
+    alert('体重を登録しました');
   }
 
   return (
     <>
       <h2>登録</h2>
-      <p>ID:{user?.uid}</p>
       <form onSubmit={onSubmit}>
         <input
           type="number"
