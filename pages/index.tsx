@@ -33,8 +33,9 @@ const Home = () => {
       .auth()
       .signInWithPopup(provider)
       .then(function (result) {
+        console.log({ result });
         setUser({
-          uid: result.uid,
+          uid: result.user.uid,
         });
       });
   };
