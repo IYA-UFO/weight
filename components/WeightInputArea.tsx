@@ -2,7 +2,7 @@ import firebase from 'firebase/app';
 import { useState } from 'react';
 
 const WeightInputArea = () => {
-  const [currentWeight, setCurrentWeight] = useState(75);
+  const [currentWeight, setCurrentWeight] = useState(null);
   const [isSending, setIsSending] = useState(false);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -23,8 +23,7 @@ const WeightInputArea = () => {
       <form onSubmit={onSubmit}>
         <input
           type="number"
-          min="50"
-          max="90"
+          inputMode="decimal"
           step="0.1"
           value={currentWeight}
           onChange={(e) => setCurrentWeight(Number(e.target.value))}
