@@ -48,7 +48,7 @@ const Home = () => {
           {!user && <button onClick={login}>Google Login</button>}
           <WeightInputArea />
           <PastWeight />
-          {user?.uid}
+          <small>UID:{user?.uid}</small>
         </Wrap>
       </UserContext.Provider>
     </>
