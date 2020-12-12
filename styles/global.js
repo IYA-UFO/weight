@@ -1,38 +1,48 @@
 import { createGlobalStyle } from 'styled-components';
+import ressCss from './ressCss';
 
-const GlobalStyle = createGlobalStyle`
+export default createGlobalStyle`
+  ${ressCss}
   html {
-    font-family: "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN", Meiryo, "メイリオ", Helvetica, Arial, Sans-Serif;
-    margin: 0;
-    padding: 0;
-    font-size: 13px;
+    font-size:10px;
   }
   body {
-    background-color: rgb(0, 10, 23);
-    margin: 0;
-    padding: 0;
-    color: rgb(250, 250, 250);
+    font-family: 
+    'Hiragino Kaku Gothic Pro', /* iOS,Mac */
+     meiryo, /* Windowsの日本語 */
+     Helvetica,/* Windows,Androidの英数 */
+     sans-serif;/* Androidを適当なゴシックに*/
+    -webkit-font-smoothing: subpixel-antialiased;
+    -moz-osx-font-smoothing: unset;
+    font-size: 15px;
+    line-height: 1.6;
+    min-width: 320px;
     width: 100%;
     height: 100%;
+    font-feature-settings:"palt";
+    overflow-x:hidden;
+  
+    @media screen and (min-width:1024px) {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+  }
+  ul {
+    list-style: none;
+  }
+  img  {
+    border: none;
+    vertical-align: top;
+    max-width: 100%;
   }
   a {
-    color: inherit;
     text-decoration: none;
+    color: inherit;
+    &:visited{
+      color: inherit;
+    }
   }
-  button {
-    font-family: inherit;
-    font-size: 1em;
-  }
-  table {
-    border-collapse: separate;
-    border-spacing: 0;
-}
-#__next {
+  #__next {
     height: 100%;
   }
-  p{
-    margin:0;
-  }
 `;
-
-export default GlobalStyle;

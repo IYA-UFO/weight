@@ -1,5 +1,6 @@
 import firebase from 'firebase/app';
 import { useState } from 'react';
+import styled from 'styled-components';
 
 const WeightInputArea = () => {
   const [currentWeight, setCurrentWeight] = useState(null);
@@ -19,21 +20,39 @@ const WeightInputArea = () => {
 
   return (
     <>
-      <h2>登録</h2>
       <form onSubmit={onSubmit}>
-        <input
+        <Input
           type="number"
           inputMode="decimal"
           step="0.1"
           value={currentWeight}
           onChange={(e) => setCurrentWeight(Number(e.target.value))}
-        ></input>
+        />
         <div>
-          {isSending ? <p>登録中</p> : <button type="submit">登録</button>}
+          {isSending ? <p>登録中</p> : <Button type="submit">登録</Button>}
         </div>
       </form>
     </>
   );
 };
+const Input = styled.input`
+  border: 1px solid gray;
+  font-size: 20px;
+  border-radius: 5px;
+  display: block;
+  margin: 0 auto;
+  padding: 5px 10px;
+`;
+
+const Button = styled.button`
+  border-radius: 5px;
+  background-color: purple;
+  font-size: 20px;
+  padding: 5px 30px;
+  color: white;
+  text-align: center;
+  margin: 10px auto;
+  display: block;
+`;
 
 export default WeightInputArea;
