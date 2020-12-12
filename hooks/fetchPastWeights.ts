@@ -54,7 +54,7 @@ const useFetchPastWeight = () => {
         return {
           week,
           records: recordsOfWeek.sort((a, b) => {
-            return a.date - b.date;
+            return a.date.unix() - b.date.unix();
           }),
         };
       });
