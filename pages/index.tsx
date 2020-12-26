@@ -16,10 +16,13 @@ const Home = () => {
   const [user, setUser] = useState(null);
   useEffect(() => {
     if (firebase.apps.length === 0) {
+      console.log('Firbaseを初期化');
       initFirebase();
     }
+
     firebase.auth().onAuthStateChanged(function (firebaseUser) {
       if (firebaseUser) {
+        console.log('ユーザーを発見');
         const loginUser = {
           uid: firebaseUser.uid,
         };
@@ -40,12 +43,29 @@ const Home = () => {
       });
   };
 
+  const logOut = () => {
+    firebase
+      .auth()
+      .signOut()
+      .then(function () {
+        console.log('ログアウト');
+        setUser(null);
+      })
+      .catch(function (error) {
+        // An error happened.
+      });
+  };
+
   return (
     <>
       <GlobalStyles />
       <UserContext.Provider value={user}>
         <Wrap>
-          {!user && <button onClick={login}>Google Login</button>}
+          {user ? (
+            <button onClick={logOut}>Google Logout</button>
+          ) : (
+            <button onClick={login}>Google Login</button>
+          )}
           <WeightInputArea />
           <PastWeight />
           <small>UID:{user?.uid}</small>

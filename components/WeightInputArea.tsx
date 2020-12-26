@@ -3,7 +3,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 const WeightInputArea = () => {
-  const [currentWeight, setCurrentWeight] = useState(null);
+  const [currentWeight, setCurrentWeight] = useState(0);
   const [isSending, setIsSending] = useState(false);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
