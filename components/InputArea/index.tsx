@@ -1,11 +1,11 @@
 import firebase from 'firebase/app';
 import { useState } from 'react';
+
 import styled from 'styled-components';
 
 const WeightInputArea = () => {
-  const [currentWeight, setCurrentWeight] = useState(0);
+  const [currentWeight, setCurrentWeight] = useState();
   const [isSending, setIsSending] = useState(false);
-
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsSending(true);
@@ -36,17 +36,17 @@ const WeightInputArea = () => {
   );
 };
 const Input = styled.input`
-  border: 1px solid gray;
+  border-bottom: 1px solid #00214d;
   font-size: 20px;
-  border-radius: 5px;
   display: block;
   margin: 0 auto;
+  text-align: center;
   padding: 5px 10px;
 `;
 
 const Button = styled.button`
   border-radius: 5px;
-  background-color: purple;
+  background-color: #ff5470;
   font-size: 20px;
   padding: 5px 30px;
   color: white;

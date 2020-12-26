@@ -12,9 +12,14 @@ function uniq(array) {
   return [...new Set(array)];
 }
 
+const average = (arr) =>
+  arr.reduce(function (prev, current, i, arr) {
+    return prev + current;
+  }) / arr.length;
+
 const useFetchPastWeight = () => {
   const user = useContext(UserContext);
-  const [pastWeights, setPastWeights] = useState([]);
+  const [data, setData] = useState({});
 
   useEffect(() => {
     if (firebase.apps.length === 0) {
@@ -28,6 +33,9 @@ const useFetchPastWeight = () => {
       return;
     }
     async function loadPastWeights() {
+      /*
+       *データのフェッチ
+       */
       const snapshot = await firebase
         .firestore()
         .collection('weights')
@@ -35,35 +43,65 @@ const useFetchPastWeight = () => {
         // .where('uid', '==', 'QtVvAD35ptaswyhPrNPNdCIQD7B3')
         .get();
 
-      if (snapshot.empty) {
-        console.log('snapshotIsEmpty');
-        return;
-      }
-
+      /*
+       *日付別データの整形・週IDの付与
+       */
       const records = snapshot.docs.map((doc) => {
         const date = dayjs(doc.data().createdAt.toDate());
         return {
           weight: doc.data().weight,
           date: date,
-          week: `${date.year()}-${date.week()}`,
+          weekId: `${date.year()}-${date.week()}`,
         };
       });
-      const weeks = uniq(records.map(({ date, week }) => week)).sort();
-      const result = weeks.map((week) => {
-        const recordsOfWeek = records.filter((record) => week === record.week);
-        return {
-          week,
-          records: recordsOfWeek.sort((a, b) => {
+
+      /*
+       *週ごとの配列を作成
+       */
+      const weekIds = uniq(records.map(({ date, weekId }) => weekId)).sort();
+      const weeks = weekIds.map((weekId) => {
+        const recordsOfWeek = records
+          .filter((record) => weekId === record.weekId)
+          .sort((a, b) => {
             return a.date.unix() - b.date.unix();
-          }),
+          });
+        const averageWeight = average(
+          recordsOfWeek.map((record) => record.weight),
+        );
+
+        return {
+          weekId,
+          averageWeight,
+          firstDay: recordsOfWeek[0].date.format('MM/DD'),
+          records: recordsOfWeek,
         };
       });
-      console.log({ result });
-      setPastWeights(result);
+
+      /*
+       *最大・最小値を割り出す
+       */
+      const weights = records.map(({ weight }) => weight);
+      const maxWeight = Math.max(...weights);
+      const minWeight = Math.min(...weights);
+
+      /*
+       *Y軸の目盛りリスト
+       */
+      const integerArr = [...Array(100).keys()];
+      const ticks = integerArr.filter((num) => {
+        return num > minWeight - 2 && num < maxWeight + 2;
+      });
+      setData({
+        weeks,
+        maxWeight,
+        minWeight,
+        ticks,
+        records,
+      });
     }
     loadPastWeights();
   }, [process.browser, user]);
-  return pastWeights;
+  return data;
 };
 
 export default useFetchPastWeight;

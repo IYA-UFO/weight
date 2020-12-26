@@ -21,7 +21,8 @@ export default createGlobalStyle`
     height: 100%;
     font-feature-settings:"palt";
     overflow-x:hidden;
-  
+    color:#00214d;
+  /* #00214d #ff5470 #00ebc7 #fde24f*/
     @media screen and (min-width:1024px) {
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
