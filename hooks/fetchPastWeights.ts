@@ -24,6 +24,7 @@ const useFetchPastWeight = () => {
     minWeight: 0,
     maxWeight: 0,
     ticks: [],
+    records: [],
   });
 
   useEffect(() => {
