@@ -19,6 +19,16 @@ const Home = () => {
       console.log('Firbaseを初期化');
       initFirebase();
     }
+    firebase
+      .auth()
+      .getRedirectResult()
+      .then(function (result) {
+        if (result.user) {
+          setUser({
+            uid: result.user.uid,
+          });
+        }
+      });
 
     firebase.auth().onAuthStateChanged(function (firebaseUser) {
       if (firebaseUser) {
@@ -33,14 +43,7 @@ const Home = () => {
 
   const login = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
-    firebase
-      .auth()
-      .signInWithPopup(provider)
-      .then(function (result) {
-        setUser({
-          uid: result.user.uid,
-        });
-      });
+    firebase.auth().signInWithRedirect(provider);
   };
 
   const logOut = () => {
