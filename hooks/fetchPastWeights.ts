@@ -19,7 +19,12 @@ const average = (arr) =>
 
 const useFetchPastWeight = () => {
   const user = useContext(UserContext);
-  const [data, setData] = useState({});
+  const [data, setData] = useState({
+    weeks: [],
+    minWeight: 0,
+    maxWeight: 0,
+    ticks: [],
+  });
 
   useEffect(() => {
     if (firebase.apps.length === 0) {
@@ -39,8 +44,8 @@ const useFetchPastWeight = () => {
       const snapshot = await firebase
         .firestore()
         .collection('weights')
-        .where('uid', '==', user.uid)
-        // .where('uid', '==', 'QtVvAD35ptaswyhPrNPNdCIQD7B3')
+        // .where('uid', '==', user.uid)
+        .where('uid', '==', 'QtVvAD35ptaswyhPrNPNdCIQD7B3')
         .get();
 
       /*
