@@ -49,6 +49,8 @@ const useFetchPastWeight = () => {
         // .where('uid', '==', 'QtVvAD35ptaswyhPrNPNdCIQD7B3')
         .get();
 
+      console.log({ snapshot });
+
       /*
        *日付別データの整形・週IDの付与
        */
@@ -57,9 +59,10 @@ const useFetchPastWeight = () => {
         return {
           weight: doc.data().weight,
           date: date,
-          weekId: `${date.year()}-${date.week()}`,
+          weekId: `${date.year()}-${('00' + date.week()).slice(-2)}`,
         };
       });
+      console.log({ records });
 
       /*
        *週ごとの配列を作成

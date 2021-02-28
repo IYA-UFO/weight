@@ -1,25 +1,28 @@
-import 'firebase/analytics';
-import 'firebase/auth';
-import 'firebase/firestore';
-import 'dayjs/locale/ja';
 import { useContext, useEffect, useState } from 'react';
+import useFetchPastWeights from 'hooks/fetchPastWeights';
+
 import styled from 'styled-components';
-import WeightInputArea from 'components/InputArea';
-import Graph from 'components/Graph';
-import Header from 'components/Header';
 import { UserContext } from 'pages/index';
 
+import Controller from 'components/Controller';
+import Home from './Home';
+import Account from './Account';
+import Record from './Record';
+
 const Main = () => {
-  const { user, setUser } = useContext(UserContext);
+  const { view } = useContext(UserContext);
   const [innerHeight, setInnerHeight] = useState(0);
   useEffect(() => {
     setInnerHeight(window.innerHeight);
   }, []);
+  const data = useFetchPastWeights();
+
   return (
     <Wrap innerHeight={innerHeight}>
-      <Header />
-      <Graph />
-      <WeightInputArea />
+      {view === 'home' && <Home data={data} />}
+      {view === 'account' && <Account />}
+      {view === 'record' && <Record data={data} />}
+      <Controller />
     </Wrap>
   );
 };
@@ -29,7 +32,6 @@ const Wrap = styled.div`
   flex-direction: column;
   justify-content: space-between;
   height: ${({ innerHeight }) => `${innerHeight}px`};
-  padding-bottom: 20px;
 `;
 
 export default Main;
