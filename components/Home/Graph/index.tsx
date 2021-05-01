@@ -1,8 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { LineChart, Line, YAxis, XAxis, CartesianGrid } from 'recharts';
 const PastWeight = ({ data: rawData }) => {
   const [range, setRange] = useState(1);
+  const [windowWidth, setWindowWidth] = useState(375);
+
+  useEffect(() => {
+    setWindowWidth(Math.min(500, window.innerWidth));
+  }, []);
+
   const getFormattedData = () => {
     if (!range) return rawData;
     const weekLength = range * 4;
@@ -65,11 +71,10 @@ const PastWeight = ({ data: rawData }) => {
       </RangeSelecter>
       {data.weeks.length > 0 && (
         <LineChart
-          width={375}
+          width={windowWidth}
           height={200}
           data={data.weeks}
           margin={{ top: 5, right: 30, bottom: 0, left: 10 }}
-          suppressHydrationWarning={true}
         >
           <Line
             type="monotone"
@@ -89,7 +94,8 @@ const PastWeight = ({ data: rawData }) => {
         </LineChart>
       )}
       <WeightChange isNegative={getWeightChangePerWeek() < 0}>
-        {getWeightChangePerWeek()}kg/週
+        {getWeightChangePerWeek() < 0 ? '-' : '＋'}
+        {Math.abs(getWeightChangePerWeek())}kg/週
       </WeightChange>
     </Wrap>
   );
@@ -112,11 +118,12 @@ const Range = styled.button`
 `;
 
 const Wrap = styled.div`
-  margin: 10px 0 0;
+  margin: 10px auto 0;
   display: flex;
   justify-content: center;
   width: 100vw;
   flex-direction: column;
+  max-width: 500px;
 `;
 
 const WeightChange = styled.p`
@@ -127,6 +134,7 @@ const WeightChange = styled.p`
   display: flex;
   justify-content: center;
   align-content: center;
+  color: ${({ isNegative }) => (isNegative ? '#00214d' : '#ff5470')};
   p {
     line-height: 1;
     vertical-align: middle;

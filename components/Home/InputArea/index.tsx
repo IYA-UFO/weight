@@ -42,6 +42,8 @@ const Input = styled.input`
   margin: 0 auto;
   text-align: center;
   padding: 5px 10px;
+  outline: none;
+  color: #00214d;
 `;
 
 const Button = styled.button`
