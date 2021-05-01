@@ -43,6 +43,9 @@ export default createGlobalStyle`
       color: inherit;
     }
   }
+  tspan{
+    font-size:13px;
+  }
   #__next {
     height: 100%;
   }

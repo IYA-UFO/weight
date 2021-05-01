@@ -49,8 +49,6 @@ const useFetchPastWeight = () => {
         // .where('uid', '==', 'QtVvAD35ptaswyhPrNPNdCIQD7B3')
         .get();
 
-      console.log({ snapshot });
-
       /*
        *日付別データの整形・週IDの付与
        */
@@ -62,7 +60,6 @@ const useFetchPastWeight = () => {
           weekId: `${date.year()}-${('00' + date.week()).slice(-2)}`,
         };
       });
-      console.log({ records });
 
       /*
        *週ごとの配列を作成
@@ -74,9 +71,10 @@ const useFetchPastWeight = () => {
           .sort((a, b) => {
             return a.date.unix() - b.date.unix();
           });
-        const averageWeight = average(
-          recordsOfWeek.map((record) => record.weight),
-        );
+        const averageWeight =
+          Math.round(
+            average(recordsOfWeek.map((record) => record.weight)) * 10,
+          ) / 10;
 
         return {
           weekId,
