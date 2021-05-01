@@ -1,18 +1,17 @@
 import { useContext } from 'react';
 import styled from 'styled-components';
+import { DataContext } from 'context/DataContextProvider';
 
-import { UserContext } from 'pages/index';
-
-const Record = ({ data }) => {
-  const { user } = useContext(UserContext);
+const Record = () => {
+  const { hasFirebaseUser, pastWeight } = useContext(DataContext);
 
   return (
     <Wrap>
-      {user === null ? (
+      {hasFirebaseUser === null ? (
         <PleaseLogin>ログインしてください</PleaseLogin>
       ) : (
         <>
-          {data.weeks.map((week) => (
+          {pastWeight.weeks.map((week) => (
             <Week key={week.weekId}>
               <WeekHead>
                 <span>

@@ -1,8 +1,10 @@
 import firebase from 'firebase/app';
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import initFirebase from '../lib/initFirebase';
+import { DataContext } from 'context/DataContextProvider';
 
-const useInitApp = (setUser) => {
+const useInitApp = () => {
+  const dataContext = useContext(DataContext);
   useEffect(() => {
     //firebase初期化
     if (firebase.apps.length === 0) {
@@ -10,21 +12,12 @@ const useInitApp = (setUser) => {
     }
 
     //firebaseログイン済みの場合、UIDをReactに渡す
-    firebase
-      .auth()
-      .getRedirectResult()
-      .then(function (result) {
-        if (result.user) {
-          setUser(result.user);
-        } else {
-          setUser(null);
-        }
-      });
+    firebase.auth().getRedirectResult();
 
     //firebaseログイン状態が変わったら、Reactに知らせる
     firebase.auth().onAuthStateChanged(function (firebaseUser) {
       if (firebaseUser) {
-        setUser(firebaseUser);
+        dataContext.setHasFirebaseUser(true);
       }
     });
   }, []);

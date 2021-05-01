@@ -2,19 +2,14 @@ import { useContext } from 'react';
 import styled from 'styled-components';
 import firebase from 'firebase/app';
 
-import { UserContext } from 'pages/index';
+import { DataContext } from 'context/DataContextProvider';
 
 const Account = () => {
-  const { user, setUser } = useContext(UserContext);
+  const { hasFirebaseUser } = useContext(DataContext);
 
   const handleClick = () => {
-    if (user) {
-      firebase
-        .auth()
-        .signOut()
-        .then(function () {
-          setUser(null);
-        });
+    if (hasFirebaseUser) {
+      firebase.auth().signOut();
     } else {
       const provider = new firebase.auth.GoogleAuthProvider();
       firebase.auth().signInWithRedirect(provider);
@@ -23,10 +18,12 @@ const Account = () => {
 
   return (
     <Wrap>
-      {user && <UserId>{user.displayName}</UserId>}
+      {hasFirebaseUser && (
+        <UserId>{firebase.auth().currentUser.displayName}</UserId>
+      )}
       <Icon onClick={handleClick}>
-        <img src={`/account/${user ? 'logout' : 'login'}.png`}></img>
-        <span>{user ? 'ログアウト' : 'ログイン'}</span>
+        <img src={`/account/${hasFirebaseUser ? 'logout' : 'login'}.png`}></img>
+        <span>{hasFirebaseUser ? 'ログアウト' : 'ログイン'}</span>
       </Icon>
     </Wrap>
   );

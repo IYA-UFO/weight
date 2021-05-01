@@ -1,18 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import { LineChart, Line, YAxis, XAxis, CartesianGrid } from 'recharts';
-const PastWeight = ({ data: rawData }) => {
-  const [range, setRange] = useState(1);
-  const [windowWidth, setWindowWidth] = useState(375);
+import { DataContext } from 'context/DataContextProvider';
 
-  useEffect(() => {
-    setWindowWidth(Math.min(500, window.innerWidth));
-  }, []);
+const PastWeight = () => {
+  const { pastWeight, windowSize } = useContext(DataContext);
+  const [range, setRange] = useState(1);
 
   const getFormattedData = () => {
-    if (!range) return rawData;
+    if (!range) return pastWeight;
     const weekLength = range * 4;
-    const weeks = rawData.weeks.slice(rawData.weeks.length - weekLength);
+    const weeks = pastWeight.weeks.slice(pastWeight.weeks.length - weekLength);
     const weights = weeks.map(({ averageWeight }) => averageWeight);
 
     const maxWeight = Math.max(...weights);
@@ -71,7 +69,7 @@ const PastWeight = ({ data: rawData }) => {
       </RangeSelecter>
       {data.weeks.length > 0 && (
         <LineChart
-          width={windowWidth}
+          width={windowSize?.width}
           height={200}
           data={data.weeks}
           margin={{ top: 5, right: 30, bottom: 0, left: 10 }}

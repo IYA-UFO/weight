@@ -1,7 +1,6 @@
-import { useContext } from 'react';
 import firebase from 'firebase/app';
-import { useEffect, useState } from 'react';
-import { UserContext } from '../pages/index';
+import { useEffect, useContext } from 'react';
+import { DataContext } from 'context/DataContextProvider';
 
 import dayjs from 'dayjs';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
@@ -18,24 +17,10 @@ const average = (arr) =>
   }) / arr.length;
 
 const useFetchPastWeight = () => {
-  const user = useContext(UserContext);
-  const [data, setData] = useState({
-    weeks: [],
-    minWeight: 0,
-    maxWeight: 0,
-    ticks: [],
-    records: [],
-  });
+  const { hasFirebaseUser, setPastWeight } = useContext(DataContext);
 
   useEffect(() => {
-    if (firebase.apps.length === 0) {
-      return null;
-    }
-    const user = firebase.auth().currentUser;
-    if (!process.browser) {
-      return;
-    }
-    if (user === null) {
+    if (!hasFirebaseUser) {
       return;
     }
     async function loadPastWeights() {
@@ -45,7 +30,7 @@ const useFetchPastWeight = () => {
       const snapshot = await firebase
         .firestore()
         .collection('weights')
-        .where('uid', '==', user.uid)
+        .where('uid', '==', firebase.auth().currentUser.uid)
         // .where('uid', '==', 'QtVvAD35ptaswyhPrNPNdCIQD7B3')
         .get();
 
@@ -98,7 +83,7 @@ const useFetchPastWeight = () => {
       const ticks = integerArr.filter((num) => {
         return num > minWeight - 2 && num < maxWeight + 2;
       });
-      setData({
+      setPastWeight({
         weeks,
         maxWeight,
         minWeight,
@@ -107,8 +92,7 @@ const useFetchPastWeight = () => {
       });
     }
     loadPastWeights();
-  }, [process.browser, user]);
-  return data;
+  }, [hasFirebaseUser]);
 };
 
 export default useFetchPastWeight;

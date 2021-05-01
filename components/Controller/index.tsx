@@ -1,21 +1,16 @@
 import styled from 'styled-components';
 import { useContext } from 'react';
 import firebase from 'firebase/app';
-import { UserContext } from '../../pages/index';
+import { DataContext } from 'context/DataContextProvider';
 
 const Controller = () => {
-  const { user, setUser, view, setView } = useContext(UserContext);
+  const { currentView, setCurrentView } = useContext(DataContext);
   const login = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
     firebase.auth().signInWithRedirect(provider);
   };
   const logOut = () => {
-    firebase
-      .auth()
-      .signOut()
-      .then(function () {
-        setUser(null);
-      });
+    firebase.auth().signOut();
   };
 
   const menuItems = [
@@ -36,12 +31,12 @@ const Controller = () => {
   return (
     <Wrap>
       {menuItems.map(({ id, text }) => {
-        const isActive = id === view;
+        const isActive = id === currentView;
         return (
           <MenuItem
             key={id}
             onClick={() => {
-              setView(id);
+              setCurrentView(id);
             }}
           >
             <img src={`/menu/${id}--${isActive ? 'active' : 'inactive'}.png`} />

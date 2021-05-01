@@ -2,19 +2,18 @@ import { useContext } from 'react';
 import styled from 'styled-components';
 import WeightInputArea from './InputArea';
 import Graph from './Graph';
+import { DataContext } from 'context/DataContextProvider';
 
-import { UserContext } from 'pages/index';
-
-const Main = ({ data }) => {
-  const { user } = useContext(UserContext);
+const Main = () => {
+  const { hasFirebaseUser, pastWeight } = useContext(DataContext);
 
   return (
     <Wrap>
-      {user === null ? (
+      {hasFirebaseUser === null ? (
         <PleaseLogin>ログインしてください</PleaseLogin>
       ) : (
         <>
-          <Graph data={data} />
+          {pastWeight && <Graph />}
           <WeightInputArea />
         </>
       )}
