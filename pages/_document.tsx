@@ -1,9 +1,16 @@
 import React from 'react';
-import Document, { DocumentInitialProps, DocumentContext } from 'next/document';
+import Document, {
+  DocumentContext,
+  DocumentInitialProps,
+  Html,
+  Head,
+  Main,
+  NextScript,
+} from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
 
-export default class CoreDocument extends Document {
-  public static async getInitialProps(
+export default class MyDocument extends Document {
+  static async getInitialProps(
     ctx: DocumentContext,
   ): Promise<DocumentInitialProps> {
     const sheet = new ServerStyleSheet();
@@ -17,7 +24,6 @@ export default class CoreDocument extends Document {
         });
 
       const initialProps = await Document.getInitialProps(ctx);
-
       return {
         ...initialProps,
         styles: (
@@ -30,5 +36,17 @@ export default class CoreDocument extends Document {
     } finally {
       sheet.seal();
     }
+  }
+  //追加
+  render() {
+    return (
+      <Html lang="ja">
+        <Head />
+        <body>
+          <Main />
+          <NextScript />
+        </body>
+      </Html>
+    );
   }
 }

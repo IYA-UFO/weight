@@ -18,7 +18,12 @@ const Main = () => {
   );
 };
 
-const Wrap = styled.div`
+const Wrap = styled.div<{
+  windowSize: {
+    height: number;
+    width: number;
+  };
+}>`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
