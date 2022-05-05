@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import styled from 'styled-components';
-import firebase from 'firebase/app';
+import firebase from 'firebase/compat/app';
 
 import { DataContext } from 'context/DataContextProvider';
 
@@ -22,7 +22,10 @@ const Account = () => {
         <UserId>{firebase.auth().currentUser.displayName}</UserId>
       )}
       <Icon onClick={handleClick}>
-        <img src={`/account/${hasFirebaseUser ? 'logout' : 'login'}.png`}></img>
+        <img
+          src={`/account/${hasFirebaseUser ? 'logout' : 'login'}.png`}
+          alt=""
+        ></img>
         <span>{hasFirebaseUser ? 'ログアウト' : 'ログイン'}</span>
       </Icon>
     </Wrap>

@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { LineChart, Line, YAxis, XAxis, CartesianGrid } from 'recharts';
 import { DataContext } from 'context/DataContextProvider';
@@ -103,7 +103,7 @@ const RangeSelecter = styled.div`
   padding: 10px;
 `;
 
-const Range = styled.button`
+const Range = styled.button<{ isActive: boolean }>`
   border-radius: 5px;
   background-color: ${({ isActive }) => (isActive ? '#00214d' : 'transparent')};
   color: ${({ isActive }) => (isActive ? 'white' : '#00214d')};
@@ -124,7 +124,7 @@ const Wrap = styled.div`
   max-width: 500px;
 `;
 
-const WeightChange = styled.p`
+const WeightChange = styled.p<{ isNegative: boolean }>`
   padding: 15px 10px;
   text-align: center;
   letter-spacing: 0.05em;

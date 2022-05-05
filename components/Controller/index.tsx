@@ -1,17 +1,9 @@
 import styled from 'styled-components';
 import { useContext } from 'react';
-import firebase from 'firebase/app';
 import { DataContext } from 'context/DataContextProvider';
 
 const Controller = () => {
   const { currentView, setCurrentView } = useContext(DataContext);
-  const login = () => {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithRedirect(provider);
-  };
-  const logOut = () => {
-    firebase.auth().signOut();
-  };
 
   const menuItems = [
     {
@@ -39,7 +31,10 @@ const Controller = () => {
               setCurrentView(id);
             }}
           >
-            <img src={`/menu/${id}--${isActive ? 'active' : 'inactive'}.png`} />
+            <img
+              src={`/menu/${id}--${isActive ? 'active' : 'inactive'}.png`}
+              alt=""
+            />
             <span>{text}</span>
           </MenuItem>
         );

@@ -1,4 +1,4 @@
-import firebase from 'firebase/app';
+import firebase from 'firebase/compat/app';
 import { useEffect, useContext } from 'react';
 import { DataContext } from 'context/DataContextProvider';
 
