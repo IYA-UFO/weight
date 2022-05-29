@@ -43,6 +43,7 @@ const useFetchPastWeight = () => {
           weight: doc.data().weight,
           date: date,
           weekId: `${date.year()}-${('00' + date.week()).slice(-2)}`,
+          id: doc.id,
         };
       });
 
