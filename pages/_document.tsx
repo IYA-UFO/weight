@@ -37,13 +37,13 @@ export default class MyDocument extends Document {
       sheet.seal();
     }
   }
-  //追加
   render() {
     return (
       <Html lang="ja">
         <Head />
         <body>
           <Main />
+          <div id="modal" />
           <NextScript />
         </body>
       </Html>
