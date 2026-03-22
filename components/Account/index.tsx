@@ -12,7 +12,7 @@ const Account = () => {
       firebase.auth().signOut();
     } else {
       const provider = new firebase.auth.GoogleAuthProvider();
-      firebase.auth().signInWithRedirect(provider);
+      firebase.auth().signInWithPopup(provider);
     }
   };
 

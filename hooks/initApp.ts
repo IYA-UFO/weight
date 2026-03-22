@@ -16,8 +16,11 @@ const useInitApp = () => {
 
     //firebaseログイン状態が変わったら、Reactに知らせる
     firebase.auth().onAuthStateChanged(function (firebaseUser) {
+      console.log('onAuthStateChanged fired:', firebaseUser); // ← 追加
       if (firebaseUser) {
         dataContext.setHasFirebaseUser(true);
+      } else {
+        dataContext.setHasFirebaseUser(false);
       }
     });
   }, []);

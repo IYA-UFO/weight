@@ -13,7 +13,7 @@ const Record = () => {
   };
   return (
     <Wrap>
-      {hasFirebaseUser === null ? (
+      {!hasFirebaseUser ? (
         <PleaseLogin>ログインしてください</PleaseLogin>
       ) : (
         <>

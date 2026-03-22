@@ -3,7 +3,7 @@ import PastWeight from 'types/PastWeight';
 export const DataContext = createContext<any>({});
 
 const DataContextProvider = ({ children }) => {
-  const [hasFirebaseUser, setHasFirebaseUser] = useState(false);
+  const [hasFirebaseUser, setHasFirebaseUser] = useState(null);
   const [pastWeight, setPastWeight] = useState<PastWeight>(null);
   const [currentView, setCurrentView] = useState('home');
   const [windowSize, setWindowSize] = useState(null);

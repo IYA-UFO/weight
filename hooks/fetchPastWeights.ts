@@ -20,6 +20,7 @@ const useFetchPastWeight = () => {
   const { hasFirebaseUser, setPastWeight } = useContext(DataContext);
 
   useEffect(() => {
+    console.log({ hasFirebaseUser });
     if (!hasFirebaseUser) {
       return;
     }
@@ -33,7 +34,7 @@ const useFetchPastWeight = () => {
         .where('uid', '==', firebase.auth().currentUser.uid)
         // .where('uid', '==', 'QtVvAD35ptaswyhPrNPNdCIQD7B3')
         .get();
-
+      console.log({ snapshot });
       /*
        *日付別データの整形・週IDの付与
        */
